@@ -1,3 +1,5 @@
+import json
+
 inventario = {
     "remera_negra": {"precio": 10000, "stock": 10},
     "pantalon_cargo": {"precio": 35000, "stock": 5},
@@ -17,6 +19,7 @@ def vender(inventario, producto, cantidad):
         return
     inventario[producto]["stock"] -= cantidad
     print(f"Vendido: {cantidad} x {producto}")
+    guardar_inventario(inventario)
 
 def reponer(inventario, producto, cantidad):
     if producto not in inventario:
@@ -24,6 +27,7 @@ def reponer(inventario, producto, cantidad):
         return
     inventario[producto]["stock"] += cantidad
     print(f"Repuesto: {cantidad} x {producto}")
+    guardar_inventario(inventario)
 
 def stock_bajo(inventario, minimo=5):
     alertas = []
@@ -32,8 +36,48 @@ def stock_bajo(inventario, minimo=5):
             alertas.append(nombre)
     return alertas
 
-vender(inventario, "buzo_oversize", 2)
-vender(inventario, "buzo_oversize", 5)
-reponer(inventario, "remera_negra", 10)
-mostrar_inventario(inventario)
+def guardar_inventario(inventario, archivo="inventario.json"):
+    with open(archivo, "w", encoding="utf-8") as f:
+        json.dump(inventario, f, indent=4, ensure_ascii=False)
+    print("Inventario guardado")
+
+def cargar_inventario(archivo="inventario.json"):
+    try:
+        with open(archivo, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("No hay archivo, usando inventario inicial")
+        return inventario
+
+inventario = cargar_inventario()
+
+while True:
+    print("\n1. Ver inventario")
+    print("2. Vender")
+    print("3. Reponer")
+    print("4. Salir")
+    opcion = input("Elegí una opción: ")
+
+    if opcion == "1":
+        mostrar_inventario(inventario)
+    elif opcion == "2":
+        producto = input("Producto: ").lower().strip()
+        try:
+            cantidad = int(input("Cantidad: "))
+        except ValueError:
+            print("La cantidad tiene que ser un número")
+            continue
+        vender(inventario, producto, cantidad)
+    elif opcion == "3":
+        producto = input("Producto: ").lower().strip()
+        try:
+            cantidad = int(input("Cantidad: "))
+        except ValueError:
+            print("La cantidad tiene que ser un número")
+            continue
+        reponer(inventario, producto, cantidad)
+        mostrar_inventario(inventario)
+    elif opcion == "4":
+        print("Chau!")
+        break
 print("Reponer:", stock_bajo(inventario))

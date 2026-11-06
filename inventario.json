@@ -1,0 +1,14 @@
+{
+    "remera_negra": {
+        "precio": 10000,
+        "stock": 40
+    },
+    "pantalon_cargo": {
+        "precio": 35000,
+        "stock": 5
+    },
+    "buzo_oversize": {
+        "precio": 30000,
+        "stock": 1
+    }
+}
