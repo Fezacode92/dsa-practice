@@ -10,5 +10,9 @@
     "buzo_oversize": {
         "precio": 30000,
         "stock": 1
+    },
+    "gorra": {
+        "precio": 8000.0,
+        "stock": 15
     }
 }

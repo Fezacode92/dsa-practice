@@ -29,6 +29,14 @@ def reponer(inventario, producto, cantidad):
     print(f"Repuesto: {cantidad} x {producto}")
     guardar_inventario(inventario)
 
+def agregar_producto(inventario, producto, precio, stock):
+    if producto in inventario:
+        print(f"{producto} ya existe")
+        return
+    inventario[producto] = {"precio": precio, "stock": stock}
+    print(f"Agregado: {producto}")
+    guardar_inventario(inventario)    
+
 def stock_bajo(inventario, minimo=5):
     alertas = []
     for nombre, datos in inventario.items():
@@ -56,6 +64,7 @@ while True:
     print("2. Vender")
     print("3. Reponer")
     print("4. Salir")
+    print("5. Agregar producto")
     opcion = input("Elegí una opción: ")
 
     if opcion == "1":
@@ -80,4 +89,14 @@ while True:
     elif opcion == "4":
         print("Chau!")
         break
-print("Reponer:", stock_bajo(inventario))
+    elif opcion == "5":
+        producto = input("Producto: ").lower().strip()
+        try:
+            precio = float(input("Precio: "))
+            stock = int(input("Stock: "))
+        except ValueError:
+            print("El precio y el stock tienen que ser números")
+            continue
+        agregar_producto(inventario, producto, precio, stock)
+    else:
+        print("Opción no válida")
